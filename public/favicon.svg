@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect x="0" y="0" width="32" height="32" fill="#ffffff" rx="4"/>
+
+    <!-- Grid of colored squares -->
+    <g transform="translate(4,4)">
+        <!-- Row 1 -->
+        <rect x="0" y="0" width="8" height="8" fill="#FFD700"/>
+        <rect x="8" y="0" width="8" height="8" fill="#FFD700"/>
+        <rect x="16" y="0" width="8" height="8" fill="#FF7F7F"/>
+
+        <!-- Row 2 -->
+        <rect x="0" y="8" width="8" height="8" fill="#FFD700"/>
+        <rect x="8" y="8" width="8" height="8" fill="#DEB887"/>
+        <rect x="16" y="8" width="8" height="8" fill="#FF7F7F"/>
+
+        <!-- Row 3 -->
+        <rect x="0" y="16" width="8" height="8" fill="#8B4513"/>
+        <rect x="8" y="16" width="8" height="8" fill="#FFA500"/>
+        <rect x="16" y="16" width="8" height="8" fill="#FFA500"/>
+    </g>
+</svg> 
