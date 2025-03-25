@@ -9,4 +9,4 @@ A sliding puzzle game built with React + TypeScript + Vite where players need to
 - **Controls**: Drag tiles to move them to empty slots  
   You can use the arrow keys on your keyboard
 
-![Sliding Stones](https://raw.githubusercontent.com/buenon/sliding-stones/master/src/assets/board.png)
+![Sliding Stones](https://raw.githubusercontent.com/buenon/sliding-stones/main/public/board.png)
