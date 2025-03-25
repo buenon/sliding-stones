@@ -28,8 +28,10 @@ export const Board: React.FC<BoardProps> = ({
           <div
             key={`cell-${row}-${col}`}
             className="board-cell"
-            data-row={row}
-            data-col={col}
+            style={{
+              top: `calc(${row} * var(--cell-size))`,
+              left: `calc(${col} * var(--cell-size))`,
+            }}
           />
         );
       }
@@ -40,8 +42,8 @@ export const Board: React.FC<BoardProps> = ({
   const renderPieces = () => {
     return pieces.map((piece) => {
       const style = {
-        top: `${piece.position.row * 100}px`,
-        left: `${piece.position.col * 100}px`,
+        top: `calc(${piece.position.row} * var(--cell-size))`,
+        left: `calc(${piece.position.col} * var(--cell-size))`,
       };
 
       const pieceClass = `piece ${piece.type} ${piece.color} ${
@@ -63,8 +65,8 @@ export const Board: React.FC<BoardProps> = ({
                 piece.id === "square" ? `color-${index + 1}` : ""
               }`}
               style={{
-                top: `${square.row * 100}px`,
-                left: `${square.col * 100}px`,
+                top: `calc(${square.row} * var(--cell-size))`,
+                left: `calc(${square.col} * var(--cell-size))`,
               }}
             />
           ))}
@@ -75,8 +77,10 @@ export const Board: React.FC<BoardProps> = ({
 
   return (
     <div className="board">
-      {renderBoard()}
-      {renderPieces()}
+      <div className="board-inner">
+        {renderBoard()}
+        {renderPieces()}
+      </div>
     </div>
   );
 };

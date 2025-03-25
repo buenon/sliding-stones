@@ -3,25 +3,50 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 480px;
-  gap: 10px;
+  max-width: 200px;
+  width: 100%;
+  gap: 6px;
+  padding: 0.5rem;
+  margin: 0 auto;
 }
 
 .main-board-container h1 {
   color: #2c3e50;
-  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
 .controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .horizontal-controls {
   display: flex;
-  justify-content: space-between;
-  width: 200px;
-  margin: 10px 0;
+  justify-content: center;
+  gap: 0.5rem;
+  width: auto;
+  margin: 4px 0;
+}
+
+@media (min-width: 320px) {
+  .main-board-container {
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 480px) {
+  .main-board-container {
+    max-width: 400px;
+    gap: 8px;
+  }
+
+  .controls {
+    gap: 0.75rem;
+  }
 }
