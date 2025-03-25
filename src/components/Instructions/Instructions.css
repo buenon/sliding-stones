@@ -1,0 +1,23 @@
+.instructions {
+  background-color: #f5f5f5;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.instructions h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.instructions ol {
+  padding-left: 1.5rem;
+}
+
+.instructions li {
+  margin: 10px 0;
+  line-height: 1.5;
+  color: #666;
+}

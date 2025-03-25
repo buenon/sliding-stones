@@ -1,0 +1,27 @@
+.main-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 480px;
+  gap: 10px;
+}
+
+.main-board-container h1 {
+  color: #2c3e50;
+  font-size: 2.5em;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.horizontal-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin: 10px 0;
+}

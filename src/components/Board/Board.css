@@ -1,0 +1,74 @@
+.board {
+  position: relative;
+  width: 420px;
+  height: 620px;
+  background-color: #e1c9a9;
+  border: 10px solid #8b5a2b;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(6, 100px);
+}
+
+.board-cell {
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+.piece {
+  position: absolute;
+  cursor: grab;
+  transition: top 0.3s, left 0.3s;
+  z-index: 1;
+  user-select: none;
+  touch-action: none;
+}
+
+.piece:active {
+  cursor: grabbing;
+}
+
+.piece.L,
+.piece.square {
+  width: 200px;
+  height: 200px;
+}
+
+.piece.selected {
+  z-index: 2;
+  box-shadow: 0 0 10px 5px rgba(0, 100, 255, 0.7);
+}
+
+.piece-square {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* L-shaped pieces */
+.piece.L.yellow .piece-square {
+  background-color: #ffd700;
+}
+.piece.L.red .piece-square {
+  background-color: #ff6b6b;
+}
+.piece.L.brown .piece-square {
+  background-color: #a0522d;
+}
+.piece.L.orange .piece-square {
+  background-color: #ffa500;
+}
+
+/* Square piece with multiple colors */
+.piece.square .piece-square.color-1 {
+  background-color: #ffd700;
+}
+.piece.square .piece-square.color-2 {
+  background-color: #ff6b6b;
+}
+.piece.square .piece-square.color-3 {
+  background-color: #a0522d;
+}
+.piece.square .piece-square.color-4 {
+  background-color: #ffa500;
+}

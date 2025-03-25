@@ -1,0 +1,15 @@
+.game-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.move-count {
+  padding: 10px;
+  background-color: #37844b;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+}
