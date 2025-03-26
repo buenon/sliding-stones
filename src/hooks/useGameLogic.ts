@@ -28,6 +28,80 @@ export const useGameLogic = (pieces: Piece[], ROWS: number, COLS: number) => {
     [pieces, getAbsoluteSquares]
   );
 
+  const hasBlockingPieces = useCallback(
+    (pieceId: string, startPos: Position, endPos: Position) => {
+      const piece = pieces.find((p) => p.id === pieceId);
+      if (!piece) return true;
+
+      // Queue for BFS path finding
+      const queue: Position[] = [startPos];
+      const visited = new Set<string>();
+      visited.add(`${startPos.row},${startPos.col}`);
+
+      // Possible moves: up, right, down, left
+      const moves = [
+        { row: -1, col: 0 },
+        { row: 0, col: 1 },
+        { row: 1, col: 0 },
+        { row: 0, col: -1 },
+      ];
+
+      while (queue.length > 0) {
+        const currentPos = queue.shift()!;
+
+        // If we reached the destination, there's a valid path
+        if (currentPos.row === endPos.row && currentPos.col === endPos.col) {
+          return false;
+        }
+
+        // Try each possible move
+        for (const move of moves) {
+          const nextPos = {
+            row: currentPos.row + move.row,
+            col: currentPos.col + move.col,
+          };
+
+          // Skip if we've already visited this position
+          const posKey = `${nextPos.row},${nextPos.col}`;
+          if (visited.has(posKey)) continue;
+
+          // Create a temporary piece at this position to check if it's valid
+          const tempPiece = { ...piece, position: nextPos };
+          const absoluteSquares = getAbsoluteSquares(tempPiece);
+
+          // Check if the piece would be valid at this position
+          let isValid = true;
+          for (const square of absoluteSquares) {
+            // Check bounds
+            if (
+              square.row < 0 ||
+              square.row >= ROWS ||
+              square.col < 0 ||
+              square.col >= COLS
+            ) {
+              isValid = false;
+              break;
+            }
+            // Check overlap with other pieces
+            if (isPositionOccupied(square.row, square.col, pieceId)) {
+              isValid = false;
+              break;
+            }
+          }
+
+          if (isValid) {
+            queue.push(nextPos);
+            visited.add(posKey);
+          }
+        }
+      }
+
+      // If we couldn't find a path to the destination, there must be blocking pieces
+      return true;
+    },
+    [pieces, isPositionOccupied, getAbsoluteSquares, ROWS, COLS]
+  );
+
   const isValidMove = useCallback(
     (pieceId: string, newPosition: Position) => {
       const piece = pieces.find((p) => p.id === pieceId);
@@ -56,9 +130,21 @@ export const useGameLogic = (pieces: Piece[], ROWS: number, COLS: number) => {
         return false;
       }
 
+      // Check if there are any pieces blocking the path
+      if (hasBlockingPieces(pieceId, piece.position, newPosition)) {
+        return false;
+      }
+
       return true;
     },
-    [pieces, ROWS, COLS, isPositionOccupied, getAbsoluteSquares]
+    [
+      pieces,
+      ROWS,
+      COLS,
+      isPositionOccupied,
+      getAbsoluteSquares,
+      hasBlockingPieces,
+    ]
   );
 
   const checkWinCondition = useCallback(() => {
