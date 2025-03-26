@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from "react";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
-import { useGameLogic } from "../../hooks/useGameLogic";
 import { useGameState } from "../../hooks/useGameState";
 import { Board } from "../Board/Board";
 import { GameInfo } from "../GameInfo/GameInfo";
@@ -21,54 +20,9 @@ const MainBoard: React.FC = () => {
     setSelectedPiece,
     initializeGame,
     resetGame,
-    updatePiecePosition,
     updateTempPosition,
     commitMove,
   } = useGameState();
-
-  const { isValidMove } = useGameLogic(pieces, ROWS, COLS);
-
-  const movePiece = useCallback(
-    (direction: "up" | "down" | "left" | "right") => {
-      if (!selectedPiece) return;
-
-      const piece = pieces.find((p) => p.id === selectedPiece);
-      if (!piece) return;
-
-      let newPosition;
-      switch (direction) {
-        case "up":
-          newPosition = {
-            row: piece.position.row - 1,
-            col: piece.position.col,
-          };
-          break;
-        case "down":
-          newPosition = {
-            row: piece.position.row + 1,
-            col: piece.position.col,
-          };
-          break;
-        case "left":
-          newPosition = {
-            row: piece.position.row,
-            col: piece.position.col - 1,
-          };
-          break;
-        case "right":
-          newPosition = {
-            row: piece.position.row,
-            col: piece.position.col + 1,
-          };
-          break;
-      }
-
-      if (isValidMove(piece.id, newPosition)) {
-        updatePiecePosition(piece.id, newPosition);
-      }
-    },
-    [selectedPiece, pieces, isValidMove, updatePiecePosition]
-  );
 
   const handleDragMove = useCallback(
     (dx: number, dy: number) => {
@@ -84,11 +38,7 @@ const MainBoard: React.FC = () => {
     setSelectedPiece(null);
   }, [selectedPiece, commitMove, setSelectedPiece]);
 
-  const { handleDragStart } = useDragAndDrop(
-    movePiece,
-    handleDragMove,
-    handleDragEnd
-  );
+  const { handleDragStart } = useDragAndDrop(handleDragMove, handleDragEnd);
 
   useEffect(() => {
     initializeGame();

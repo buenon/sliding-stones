@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export const useDragAndDrop = (
-  onMove: (direction: "up" | "down" | "left" | "right") => void,
   onDragMove: (dx: number, dy: number) => void,
   onDragEnd: (dx: number, dy: number) => void
 ) => {
