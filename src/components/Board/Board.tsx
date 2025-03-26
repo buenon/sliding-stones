@@ -8,7 +8,10 @@ interface BoardProps {
   pieces: Piece[];
   selectedPiece: string | null;
   tempPosition: Position | null;
-  onPieceClick: (pieceId: string, event: React.MouseEvent) => void;
+  onPieceClick: (
+    pieceId: string,
+    event: React.MouseEvent | React.TouchEvent
+  ) => void;
 }
 
 export const Board: React.FC<BoardProps> = ({
@@ -60,6 +63,7 @@ export const Board: React.FC<BoardProps> = ({
           className={pieceClass}
           style={style}
           onMouseDown={(e) => onPieceClick(piece.id, e)}
+          onTouchStart={(e) => onPieceClick(piece.id, e)}
         >
           {piece.squares.map((square, index) => (
             <div

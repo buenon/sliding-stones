@@ -45,7 +45,7 @@ const MainBoard: React.FC = () => {
   }, [initializeGame]);
 
   const handlePieceClick = useCallback(
-    (pieceId: string, event: React.MouseEvent) => {
+    (pieceId: string, event: React.MouseEvent | React.TouchEvent) => {
       setSelectedPiece(pieceId);
       handleDragStart(event);
     },

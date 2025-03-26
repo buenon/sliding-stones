@@ -9,23 +9,30 @@ export const useDragAndDrop = (
   const lastMoveTime = useRef<number>(0);
   const MOVE_INTERVAL = 100; // Minimum time between moves in ms
 
-  const handleDragStart = useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
+  const handleDragStart = useCallback(
+    (event: React.MouseEvent | React.TouchEvent) => {
+      event.preventDefault();
 
-    const clientX = event.clientX;
-    const clientY = event.clientY;
+      const clientX =
+        "touches" in event ? event.touches[0].clientX : event.clientX;
+      const clientY =
+        "touches" in event ? event.touches[0].clientY : event.clientY;
 
-    setIsDragging(true);
-    dragStartPos.current = { x: clientX, y: clientY };
-    lastMoveTime.current = Date.now();
-  }, []);
+      setIsDragging(true);
+      dragStartPos.current = { x: clientX, y: clientY };
+      lastMoveTime.current = Date.now();
+    },
+    []
+  );
 
   const handleDragMove = useCallback(
-    (event: React.MouseEvent) => {
+    (event: React.MouseEvent | React.TouchEvent) => {
       if (!isDragging || !dragStartPos.current) return;
 
-      const clientX = event.clientX;
-      const clientY = event.clientY;
+      const clientX =
+        "touches" in event ? event.touches[0].clientX : event.clientX;
+      const clientY =
+        "touches" in event ? event.touches[0].clientY : event.clientY;
 
       const dx = clientX - dragStartPos.current.x;
       const dy = clientY - dragStartPos.current.y;
@@ -40,11 +47,13 @@ export const useDragAndDrop = (
   );
 
   const handleDragEnd = useCallback(
-    (event: React.MouseEvent) => {
+    (event: React.MouseEvent | React.TouchEvent) => {
       if (!isDragging || !dragStartPos.current) return;
 
-      const clientX = event.clientX;
-      const clientY = event.clientY;
+      const clientX =
+        "touches" in event ? event.changedTouches[0].clientX : event.clientX;
+      const clientY =
+        "touches" in event ? event.changedTouches[0].clientY : event.clientY;
 
       const dx = clientX - dragStartPos.current.x;
       const dy = clientY - dragStartPos.current.y;
@@ -69,12 +78,28 @@ export const useDragAndDrop = (
       }
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging) {
+        handleDragMove(e as unknown as React.TouchEvent);
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isDragging) {
+        handleDragEnd(e as unknown as React.TouchEvent);
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isDragging, handleDragMove, handleDragEnd]);
 
