@@ -1,5 +1,5 @@
 import React from "react";
-import { Piece } from "../../hooks/useGameState";
+import { Piece, Position } from "../../hooks/useGameState";
 import "./Board.css";
 
 interface BoardProps {
@@ -7,10 +7,8 @@ interface BoardProps {
   cols: number;
   pieces: Piece[];
   selectedPiece: string | null;
-  onPieceClick: (
-    pieceId: string,
-    event: React.MouseEvent | React.TouchEvent
-  ) => void;
+  tempPosition: Position | null;
+  onPieceClick: (pieceId: string, event: React.MouseEvent) => void;
 }
 
 export const Board: React.FC<BoardProps> = ({
@@ -18,6 +16,7 @@ export const Board: React.FC<BoardProps> = ({
   cols,
   pieces,
   selectedPiece,
+  tempPosition,
   onPieceClick,
 }) => {
   const renderBoard = () => {
@@ -41,9 +40,14 @@ export const Board: React.FC<BoardProps> = ({
 
   const renderPieces = () => {
     return pieces.map((piece) => {
+      const position =
+        selectedPiece === piece.id && tempPosition
+          ? tempPosition
+          : piece.position;
+
       const style = {
-        top: `calc(${piece.position.row} * var(--cell-size))`,
-        left: `calc(${piece.position.col} * var(--cell-size))`,
+        top: `calc(${position.row} * var(--cell-size))`,
+        left: `calc(${position.col} * var(--cell-size))`,
       };
 
       const pieceClass = `piece ${piece.type} ${piece.color} ${
@@ -56,7 +60,6 @@ export const Board: React.FC<BoardProps> = ({
           className={pieceClass}
           style={style}
           onMouseDown={(e) => onPieceClick(piece.id, e)}
-          onTouchStart={(e) => onPieceClick(piece.id, e)}
         >
           {piece.squares.map((square, index) => (
             <div

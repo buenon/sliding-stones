@@ -22,8 +22,9 @@ export const useGameState = () => {
   const [selectedPiece, setSelectedPiece] = useState<string | null>(null);
   const [gameWon, setGameWon] = useState<boolean>(false);
   const [moveCount, setMoveCount] = useState<number>(0);
+  const [tempPosition, setTempPosition] = useState<Position | null>(null);
 
-  const { checkWinCondition } = useGameLogic(pieces, 6, 4);
+  const { checkWinCondition, isValidMove } = useGameLogic(pieces, 6, 4);
 
   // Add effect to check win condition whenever pieces change
   useEffect(() => {
@@ -167,6 +168,7 @@ export const useGameState = () => {
   const resetGame = useCallback(() => {
     initializeGame();
     setSelectedPiece(null);
+    setTempPosition(null);
   }, [initializeGame]);
 
   const updatePiecePosition = useCallback(
@@ -177,8 +179,50 @@ export const useGameState = () => {
         )
       );
       setMoveCount((prev) => prev + 1);
+      setTempPosition(null);
     },
     []
+  );
+
+  const updateTempPosition = useCallback(
+    (pieceId: string, dx: number, dy: number) => {
+      const piece = pieces.find((p) => p.id === pieceId);
+      if (!piece) return;
+
+      const cellSize = 100; // This should match the CSS variable
+      const rowDelta = Math.round(dy / cellSize);
+      const colDelta = Math.round(dx / cellSize);
+
+      const newPosition = {
+        row: piece.position.row + rowDelta,
+        col: piece.position.col + colDelta,
+      };
+
+      // Only update temp position if the move is valid
+      if (isValidMove(pieceId, newPosition)) {
+        setTempPosition(newPosition);
+      }
+    },
+    [pieces, isValidMove]
+  );
+
+  const commitMove = useCallback(
+    (pieceId: string) => {
+      const piece = pieces.find((p) => p.id === pieceId);
+      if (!piece || !tempPosition) return;
+
+      // Only commit the move if the piece has moved from its original position
+      // and the move is valid
+      if (
+        (tempPosition.row !== piece.position.row ||
+          tempPosition.col !== piece.position.col) &&
+        isValidMove(pieceId, tempPosition)
+      ) {
+        updatePiecePosition(pieceId, tempPosition);
+      }
+      setTempPosition(null);
+    },
+    [pieces, tempPosition, isValidMove, updatePiecePosition]
   );
 
   return {
@@ -186,10 +230,13 @@ export const useGameState = () => {
     selectedPiece,
     gameWon,
     moveCount,
+    tempPosition,
     setSelectedPiece,
     setGameWon,
     initializeGame,
     resetGame,
     updatePiecePosition,
+    updateTempPosition,
+    commitMove,
   };
 };
