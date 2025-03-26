@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from "react";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
 import { useGameLogic } from "../../hooks/useGameLogic";
 import { useGameState } from "../../hooks/useGameState";
-import { useKeyboardControls } from "../../hooks/useKeyboardControls";
 import { Board } from "../Board/Board";
 import { GameInfo } from "../GameInfo/GameInfo";
 import { Instructions } from "../Instructions/Instructions";
@@ -69,7 +68,6 @@ const MainBoard: React.FC = () => {
   );
 
   const { handleDragStart } = useDragAndDrop(movePiece);
-  useKeyboardControls(movePiece, !!selectedPiece);
 
   useEffect(() => {
     initializeGame();
